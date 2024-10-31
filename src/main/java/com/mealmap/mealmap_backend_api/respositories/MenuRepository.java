@@ -1,4 +1,7 @@
 package com.mealmap.mealmap_backend_api.respositories;
 
-public interface MenuRepository {
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface MenuRepository{
 }
