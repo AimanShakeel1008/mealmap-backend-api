@@ -15,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Table(name = "app_user")
+@Builder
 public class User {
 
     @Id

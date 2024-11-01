@@ -8,6 +8,7 @@ import com.mealmap.mealmap_backend_api.entities.enums.Role;
 import com.mealmap.mealmap_backend_api.respositories.CustomerRepository;
 import com.mealmap.mealmap_backend_api.services.AuthService;
 import com.mealmap.mealmap_backend_api.services.CustomerService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
     private  final CustomerRepository customerRepository;
 
     @Override
+    @Transactional
     public UserDto register(SignupDto signupDto) {
         User savedUser = authService.signup(signupDto, Set.of(Role.CUSTOMER));
         createNewCustomer(savedUser);
