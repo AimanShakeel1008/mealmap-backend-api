@@ -15,7 +15,12 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
-    private static final String[] PUBLIC_ROUTES = {"/auth/**","/api/v1/customer/register","/api/v1/deliveryPersonnel/register","/swagger-ui/**","/v3/api-docs/**"};
+    private static final String[] PUBLIC_ROUTES = {
+            "/auth/**",
+            "/api/v1/customer/register",
+            "/api/v1/deliveryPersonnel/register",
+            "/api/v1/restaurantOwner/register",
+            "/swagger-ui/**","/v3/api-docs/**"};
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
