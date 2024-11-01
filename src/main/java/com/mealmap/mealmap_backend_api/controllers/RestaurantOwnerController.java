@@ -1,5 +1,6 @@
 package com.mealmap.mealmap_backend_api.controllers;
 
+import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
 import com.mealmap.mealmap_backend_api.dto.SignupDto;
 import com.mealmap.mealmap_backend_api.dto.UserDto;
 import com.mealmap.mealmap_backend_api.services.DeliveryPersonnelService;
@@ -21,5 +22,10 @@ public class RestaurantOwnerController {
     @PostMapping("/register")
     ResponseEntity<UserDto> register(@RequestBody SignupDto signupDto) {
         return new ResponseEntity<>(restaurantOwnerService.register(signupDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/registerRestaurant")
+    ResponseEntity<RestaurantDto> registerRestaurant(@RequestBody RestaurantDto restaurantDto) {
+        return new ResponseEntity<>(restaurantOwnerService.registerRestaurant(restaurantDto), HttpStatus.CREATED);
     }
 }

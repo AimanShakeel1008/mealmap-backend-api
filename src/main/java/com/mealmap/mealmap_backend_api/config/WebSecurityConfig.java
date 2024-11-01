@@ -19,7 +19,7 @@ public class WebSecurityConfig {
             "/auth/**",
             "/api/v1/customer/register",
             "/api/v1/deliveryPersonnel/register",
-            "/api/v1/restaurantOwner/register",
+            "/api/v1/restaurantOwner/*",
             "/swagger-ui/**","/v3/api-docs/**"};
 
     @Bean
