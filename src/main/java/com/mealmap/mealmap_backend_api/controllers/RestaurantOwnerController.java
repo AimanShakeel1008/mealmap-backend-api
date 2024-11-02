@@ -20,7 +20,7 @@ public class RestaurantOwnerController {
         return new ResponseEntity<>(restaurantOwnerService.register(signupDto), HttpStatus.CREATED);
     }
 
-    @PostMapping("/restaurant")
+    @PostMapping("/restaurants")
     ResponseEntity<RestaurantDto> registerRestaurant(@RequestBody RestaurantDto restaurantDto) {
         return new ResponseEntity<>(restaurantOwnerService.registerRestaurant(restaurantDto), HttpStatus.CREATED);
     }
