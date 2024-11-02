@@ -1,22 +1,20 @@
 package com.mealmap.mealmap_backend_api.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MenuDto {
+public class MenuItemDto {
 
     private Long id;
 
-    private String title;
-
-    private List<MenuItemDto> items;
+    private String name;
+    private String description;
+    private Double price;
+    private Boolean available;
 }
