@@ -1,7 +1,6 @@
 package com.mealmap.mealmap_backend_api.services;
 
-import com.mealmap.mealmap_backend_api.dto.MenuDto;
-import com.mealmap.mealmap_backend_api.dto.MenuRequestDto;
+
 import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
 
 import java.util.List;
@@ -15,7 +14,5 @@ public interface RestaurantService {
 
     List<RestaurantDto> getAllRestaurants();
 
-    MenuDto createMenuForARestaurant(Long restaurantId, MenuRequestDto menuRequestDto);
-
-    MenuDto getMenuForARestaurant(Long restaurantId);
+    List<RestaurantDto> getRestaurantsByCuisine(String cuisineType);
 }

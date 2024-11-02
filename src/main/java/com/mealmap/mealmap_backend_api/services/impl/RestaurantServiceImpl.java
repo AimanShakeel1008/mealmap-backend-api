@@ -68,37 +68,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    @Transactional
-    public MenuDto createMenuForARestaurant(Long restaurantId, MenuRequestDto menuRequestDto) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new RuntimeException("Restaurant not found with id: "+restaurantId));
-
-        Menu menu = new Menu();
-        menu.setTitle(menuRequestDto.getTitle());
-        menu.setRestaurant(restaurant);
-
-        List<MenuItem> menuItems = menuRequestDto.getItems().stream().map(itemDTO -> {
-            MenuItem item = new MenuItem();
-            item.setName(itemDTO.getName());
-            item.setDescription(itemDTO.getDescription());
-            item.setPrice(itemDTO.getPrice());
-            item.setAvailable(itemDTO.getAvailable());
-            item.setMenu(menu);
-            return item;
-        }).toList();
-
-        menu.setItems(menuItems);
-        Menu savedMenu = menuRepository.save(menu);
-
-        return modelMapper.map(savedMenu, MenuDto.class);
-    }
-
-    @Override
-    public MenuDto getMenuForARestaurant(Long restaurantId) {
-
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new RuntimeException("Restaurant not found with id: "+restaurantId));
-
-        return modelMapper.map(menuRepository.findByRestaurant(restaurant), MenuDto.class);
+    public List<RestaurantDto> getRestaurantsByCuisine(String cuisineType) {
+        return restaurantRepository.findRestaurantByCuisineType(cuisineType)
+                .stream()
+                .map(restaurant -> modelMapper.map(restaurant, RestaurantDto.class))
+                .toList();
     }
 }

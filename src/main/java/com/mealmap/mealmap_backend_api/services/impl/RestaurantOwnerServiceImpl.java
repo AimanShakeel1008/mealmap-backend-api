@@ -6,6 +6,7 @@ import com.mealmap.mealmap_backend_api.entities.User;
 import com.mealmap.mealmap_backend_api.entities.enums.Role;
 import com.mealmap.mealmap_backend_api.respositories.RestaurantOwnerRepository;
 import com.mealmap.mealmap_backend_api.services.AuthService;
+import com.mealmap.mealmap_backend_api.services.MenuService;
 import com.mealmap.mealmap_backend_api.services.RestaurantOwnerService;
 import com.mealmap.mealmap_backend_api.services.RestaurantService;
 import jakarta.transaction.Transactional;
@@ -23,6 +24,7 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
     private final ModelMapper modelMapper;
     private  final RestaurantOwnerRepository restaurantOwnerRepository;
     private final RestaurantService restaurantService;
+    private final MenuService menuService;
 
     @Override
     @Transactional
@@ -66,11 +68,11 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
 
     @Override
     public MenuDto createMenuForARestaurant(Long restaurantId, MenuRequestDto menuRequestDto) {
-        return restaurantService.createMenuForARestaurant(restaurantId, menuRequestDto);
+        return menuService.createMenuForARestaurant(restaurantId, menuRequestDto);
     }
 
     @Override
     public MenuDto getMenuForARestaurant(Long restaurantId) {
-        return restaurantService.getMenuForARestaurant(restaurantId);
+        return menuService.getMenuForARestaurant(restaurantId);
     }
 }
