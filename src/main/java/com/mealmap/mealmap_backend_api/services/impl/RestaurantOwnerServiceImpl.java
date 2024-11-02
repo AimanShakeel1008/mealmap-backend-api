@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -48,5 +49,20 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
     @Override
     public RestaurantDto registerRestaurant(RestaurantDto restaurantDto) {
         return restaurantService.createNewRestaurant(restaurantDto);
+    }
+
+    @Override
+    public RestaurantDto getRestaurantById(Long restaurantId) {
+        return restaurantService.getRestaurantById(restaurantId);
+    }
+
+    @Override
+    public RestaurantDto getRestaurantByName(String restaurantName) {
+        return restaurantService.getRestaurantByName(restaurantName);
+    }
+
+    @Override
+    public List<RestaurantDto> getAllRestaurants() {
+        return restaurantService.getAllRestaurants();
     }
 }

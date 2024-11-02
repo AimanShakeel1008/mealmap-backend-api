@@ -3,15 +3,13 @@ package com.mealmap.mealmap_backend_api.controllers;
 import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
 import com.mealmap.mealmap_backend_api.dto.SignupDto;
 import com.mealmap.mealmap_backend_api.dto.UserDto;
-import com.mealmap.mealmap_backend_api.services.DeliveryPersonnelService;
 import com.mealmap.mealmap_backend_api.services.RestaurantOwnerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/restaurantOwner")
@@ -24,8 +22,23 @@ public class RestaurantOwnerController {
         return new ResponseEntity<>(restaurantOwnerService.register(signupDto), HttpStatus.CREATED);
     }
 
-    @PostMapping("/registerRestaurant")
+    @PostMapping("/restaurant")
     ResponseEntity<RestaurantDto> registerRestaurant(@RequestBody RestaurantDto restaurantDto) {
         return new ResponseEntity<>(restaurantOwnerService.registerRestaurant(restaurantDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/restaurants")
+    ResponseEntity<List<RestaurantDto>> getAllRestaurants() {
+        return new ResponseEntity<>(restaurantOwnerService.getAllRestaurants(), HttpStatus.OK);
+    }
+
+    @GetMapping("/restaurants/{restaurantId}")
+    ResponseEntity<RestaurantDto> getRestaurantById(@PathVariable Long restaurantId) {
+        return new ResponseEntity<>(restaurantOwnerService.getRestaurantById(restaurantId), HttpStatus.OK);
+    }
+
+    @GetMapping("/restaurants/search")
+    ResponseEntity<RestaurantDto> getRestaurantByName(@RequestParam String restaurantName) {
+        return new ResponseEntity<>(restaurantOwnerService.getRestaurantByName(restaurantName), HttpStatus.OK);
     }
 }
