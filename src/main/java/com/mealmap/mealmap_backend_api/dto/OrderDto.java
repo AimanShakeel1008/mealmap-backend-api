@@ -1,9 +1,8 @@
 package com.mealmap.mealmap_backend_api.dto;
 
+import com.mealmap.mealmap_backend_api.entities.enums.OrderStatus;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,5 +26,5 @@ public class OrderDto {
     private BigDecimal totalAmount;
     private PaymentMode paymentMode;
     private PaymentStatus paymentStatus;
-    private String status;
+    private OrderStatus orderStatus;
 }

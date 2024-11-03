@@ -1,5 +1,6 @@
 package com.mealmap.mealmap_backend_api.entities;
 
+import com.mealmap.mealmap_backend_api.entities.enums.OrderStatus;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentStatus;
 import jakarta.persistence.*;
@@ -40,6 +41,7 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL)
     private List<CartItem> items = new ArrayList<>();
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
 }

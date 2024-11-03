@@ -3,6 +3,7 @@ package com.mealmap.mealmap_backend_api.services.impl;
 import com.mealmap.mealmap_backend_api.dto.OrderDto;
 import com.mealmap.mealmap_backend_api.entities.Cart;
 import com.mealmap.mealmap_backend_api.entities.Order;
+import com.mealmap.mealmap_backend_api.entities.enums.OrderStatus;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentStatus;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
@@ -50,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalAmount(totalAmount);
         order.setPaymentMode(paymentMode);
         order.setPaymentStatus(PaymentStatus.PENDING);
-        order.setStatus("Pending");
+        order.setOrderStatus(OrderStatus.PENDING);
 
         Order savedOrder = orderRepository.save(order);
 
