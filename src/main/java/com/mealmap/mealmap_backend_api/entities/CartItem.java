@@ -9,18 +9,17 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuItem {
+public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String description;
-    private Double price;
-    private Boolean available;
+    @ManyToOne
+    private MenuItem menuItem;
 
     @ManyToOne
-    @JoinColumn(name = "menu_id", nullable = false)
-    private Menu menu;
+    private Cart cart;
+
+    private int quantity;
 }

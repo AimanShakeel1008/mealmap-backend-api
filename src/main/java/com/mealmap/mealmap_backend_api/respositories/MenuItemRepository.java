@@ -1,6 +1,5 @@
 package com.mealmap.mealmap_backend_api.respositories;
 
-import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
 import com.mealmap.mealmap_backend_api.entities.MenuItem;
 import com.mealmap.mealmap_backend_api.entities.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;

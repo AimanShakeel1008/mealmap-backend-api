@@ -1,10 +1,12 @@
 package com.mealmap.mealmap_backend_api.controllers;
 
-import com.mealmap.mealmap_backend_api.dto.MenuDto;
-import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
-import com.mealmap.mealmap_backend_api.dto.SignupDto;
-import com.mealmap.mealmap_backend_api.dto.UserDto;
+import com.mealmap.mealmap_backend_api.dto.*;
+import com.mealmap.mealmap_backend_api.entities.Cart;
+import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
+import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
+import com.mealmap.mealmap_backend_api.services.CartService;
 import com.mealmap.mealmap_backend_api.services.CustomerService;
+import com.mealmap.mealmap_backend_api.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final CartService cartService;
+    private final OrderService orderService;
 
     @PostMapping("/register")
     ResponseEntity<UserDto> register(@RequestBody SignupDto signupDto) {
@@ -56,5 +60,15 @@ public class CustomerController {
         return ResponseEntity.ok(restaurants);
     }
 
+    @PostMapping("/cart")
+    public ResponseEntity<CartDto> addToCart(@RequestParam Long menuItemId, @RequestParam int quantity) {
+        CartDto cartDto = cartService.addToCart(menuItemId, quantity);
+        return ResponseEntity.ok(cartDto);
+    }
 
+    @PostMapping("/order")
+    public ResponseEntity<OrderDto> placeOrder(@RequestParam PaymentMode paymentMode) {
+        OrderDto order = orderService.placeOrder(paymentMode);
+        return ResponseEntity.ok(order);
+    }
 }
