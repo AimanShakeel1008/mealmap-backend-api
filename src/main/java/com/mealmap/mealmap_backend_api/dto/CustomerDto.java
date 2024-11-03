@@ -13,4 +13,5 @@ public class CustomerDto {
 
     private Long id;
     private UserDto user;
+    private String address;
 }

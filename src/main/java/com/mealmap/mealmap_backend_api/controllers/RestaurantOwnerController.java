@@ -1,6 +1,8 @@
 package com.mealmap.mealmap_backend_api.controllers;
 
 import com.mealmap.mealmap_backend_api.dto.*;
+import com.mealmap.mealmap_backend_api.entities.enums.OrderStatus;
+import com.mealmap.mealmap_backend_api.services.OrderService;
 import com.mealmap.mealmap_backend_api.services.RestaurantOwnerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestaurantOwnerController {
     private final RestaurantOwnerService restaurantOwnerService;
+    private final OrderService orderService;
 
     @PostMapping("/register")
     ResponseEntity<UserDto> register(@RequestBody SignupDto signupDto) {
@@ -48,5 +51,10 @@ public class RestaurantOwnerController {
     @GetMapping("/restaurants/{restaurantId}/menu")
     ResponseEntity<MenuDto> getMenuForARestaurant(@PathVariable Long restaurantId) {
         return new ResponseEntity<>(restaurantOwnerService.getMenuForARestaurant(restaurantId), HttpStatus.OK);
+    }
+
+    @PutMapping("/order/{orderId}")
+    ResponseEntity<OrderDto> updateOrderStatus(@PathVariable Long orderId, @RequestParam OrderStatus orderStatus) {
+        return new ResponseEntity<>(orderService.updateOrderStatus(orderId, orderStatus), HttpStatus.OK);
     }
 }
