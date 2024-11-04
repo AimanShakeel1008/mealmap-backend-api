@@ -42,4 +42,12 @@ public class DeliveryPersonnelServiceImpl implements DeliveryPersonnelService {
 
         return deliveryPersonnelRepository.save(deliveryPersonnel);
     }
+
+    @Override
+    public DeliveryPersonnel updateDeliveryPersonnelAvailability(DeliveryPersonnel deliveryPersonnel, boolean available) {
+
+        deliveryPersonnel.setAvailable(available);
+
+        return deliveryPersonnelRepository.save(deliveryPersonnel);
+    }
 }

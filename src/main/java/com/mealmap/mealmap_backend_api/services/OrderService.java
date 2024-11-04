@@ -7,5 +7,5 @@ import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
 public interface OrderService {
     OrderDto placeOrder(PaymentMode paymentMode);
 
-    OrderDto updateOrderStatus(Long orderId, OrderStatus orderStatus);
+    OrderDto updateOrderStatus(Long orderId);
 }

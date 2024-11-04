@@ -1,5 +1,6 @@
 package com.mealmap.mealmap_backend_api.entities;
 
+import com.mealmap.mealmap_backend_api.entities.enums.DeliveryRequestStatus;
 import com.mealmap.mealmap_backend_api.entities.enums.DeliveryStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,14 +20,12 @@ public class DeliveryRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Customer customer;
-
-    @ManyToOne
-    private Restaurant restaurant;
+    @OneToOne
+    @JoinColumn(name = "order_id", nullable = false, unique = true)
+    private Order order;
 
     @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryStatus;
+    private DeliveryRequestStatus deliveryRequestStatus;
 
     @CreationTimestamp
     private LocalDateTime createdTime;

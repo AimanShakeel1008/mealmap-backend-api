@@ -5,10 +5,7 @@ import com.mealmap.mealmap_backend_api.dto.OrderDto;
 import com.mealmap.mealmap_backend_api.entities.Cart;
 import com.mealmap.mealmap_backend_api.entities.DeliveryRequest;
 import com.mealmap.mealmap_backend_api.entities.Order;
-import com.mealmap.mealmap_backend_api.entities.enums.DeliveryStatus;
-import com.mealmap.mealmap_backend_api.entities.enums.OrderStatus;
-import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
-import com.mealmap.mealmap_backend_api.entities.enums.PaymentStatus;
+import com.mealmap.mealmap_backend_api.entities.enums.*;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.respositories.CartRepository;
 import com.mealmap.mealmap_backend_api.respositories.DeliveryRequestRepository;
@@ -69,21 +66,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderDto updateOrderStatus(Long orderId, OrderStatus orderStatus) {
+    public OrderDto updateOrderStatus(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
-        order.setOrderStatus(orderStatus);
+        order.setOrderStatus(OrderStatus.CONFIRMED);
 
         Order savedOrder = orderRepository.save(order);
 
-        if(orderStatus.equals(OrderStatus.CONFIRMED)) {
-            DeliveryRequest deliveryRequest = new DeliveryRequest();
-            deliveryRequest.setRestaurant(order.getRestaurant());
-            deliveryRequest.setCustomer(order.getCustomer());
-            deliveryRequest.setDeliveryStatus(DeliveryStatus.PENDING);
+        DeliveryRequest deliveryRequest = new DeliveryRequest();
 
-            deliveryRequestRepository.save(deliveryRequest);
-        }
+        deliveryRequest.setOrder(savedOrder);
+        deliveryRequest.setDeliveryRequestStatus(DeliveryRequestStatus.PENDING);
+
+        deliveryRequestRepository.save(deliveryRequest);
 
         return modelMapper.map(savedOrder, OrderDto.class);
     }

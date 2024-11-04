@@ -53,8 +53,8 @@ public class RestaurantOwnerController {
         return new ResponseEntity<>(restaurantOwnerService.getMenuForARestaurant(restaurantId), HttpStatus.OK);
     }
 
-    @PutMapping("/order/{orderId}")
-    ResponseEntity<OrderDto> updateOrderStatus(@PathVariable Long orderId, @RequestParam OrderStatus orderStatus) {
-        return new ResponseEntity<>(orderService.updateOrderStatus(orderId, orderStatus), HttpStatus.OK);
+    @PutMapping("/order/{orderId}/accept")
+    ResponseEntity<OrderDto> acceptOrder(@PathVariable Long orderId) {
+        return new ResponseEntity<>(orderService.updateOrderStatus(orderId), HttpStatus.OK);
     }
 }
