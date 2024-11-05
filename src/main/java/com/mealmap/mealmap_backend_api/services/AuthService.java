@@ -8,4 +8,9 @@ import java.util.Set;
 
 public interface AuthService {
     User signup(SignupDto signupDto, Set<Role> roles);
+
+    String[] login(String email, String password);
+
+    String refreshToken(String refreshToken);
+
 }

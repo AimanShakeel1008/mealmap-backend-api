@@ -1,5 +1,6 @@
 package com.mealmap.mealmap_backend_api.config;
 
+import com.mealmap.mealmap_backend_api.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -15,11 +17,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
 
+    private final JwtAuthFilter jwtAuthFilter;
+
     private static final String[] PUBLIC_ROUTES = {
-            "/auth/**",
             "/api/v1/customer/register",
             "/api/v1/deliveryPersonnel/register",
-            "/api/v1/restaurantOwner/*",
+            "/api/v1/restaurantOwner/register",
+            "/api/v1/auth/*",
             "/swagger-ui/**","/v3/api-docs/**"};
 
     @Bean
@@ -30,9 +34,10 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrfConfig -> csrfConfig.disable())
                 .authorizeHttpRequests(auth -> auth
-                        //.requestMatchers(PUBLIC_ROUTES).permitAll()
-                        .anyRequest().permitAll()
-                );
+                        .requestMatchers(PUBLIC_ROUTES).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

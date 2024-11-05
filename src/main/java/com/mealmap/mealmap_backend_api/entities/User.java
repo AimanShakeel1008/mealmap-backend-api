@@ -4,9 +4,14 @@ import com.mealmap.mealmap_backend_api.entities.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -16,7 +21,7 @@ import java.util.Set;
 @ToString
 @Table(name = "app_user")
 @Builder
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +38,16 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @CreationTimestamp
-    private LocalDateTime createdTime;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
 
 }

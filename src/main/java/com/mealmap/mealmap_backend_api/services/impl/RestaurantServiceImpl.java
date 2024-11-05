@@ -7,6 +7,7 @@ import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.exceptions.RuntimeConflictException;
 import com.mealmap.mealmap_backend_api.respositories.MenuRepository;
 import com.mealmap.mealmap_backend_api.respositories.RestaurantRepository;
+import com.mealmap.mealmap_backend_api.services.RestaurantOwnerService;
 import com.mealmap.mealmap_backend_api.services.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,19 +21,21 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
     private final ModelMapper modelMapper;
-    private final MenuRepository menuRepository;
+    private final RestaurantOwnerService restaurantOwnerService;
 
 
     @Override
     public RestaurantDto createNewRestaurant(RestaurantDto restaurantDto) {
         Restaurant restaurant = restaurantRepository.findByName(restaurantDto.getName()).orElse(null);
 
+        RestaurantOwner currentRestaurantOwner = restaurantOwnerService.getCurrentRestaurantOwner();
+
         if (restaurant != null) throw new RuntimeConflictException("Cannot register restaurant, restaurant already exists with name " +restaurantDto.getName());
 
         Restaurant mappedRestaurant = modelMapper.map(restaurantDto, Restaurant.class);
 
         mappedRestaurant.setOpen(true);
-        mappedRestaurant.setOwner(RestaurantOwner.builder().id(1L).build());
+        mappedRestaurant.setOwner(RestaurantOwner.builder().id(currentRestaurantOwner.getId()).build());
 
         Restaurant savedRestaurant = restaurantRepository.save(mappedRestaurant);
 

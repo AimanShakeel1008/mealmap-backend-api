@@ -29,7 +29,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public List<DeliveryDto> getAllDeliveries() {
-        List<Delivery>  deliveries = deliveryRepository.findByDeliveryPersonnel(DeliveryPersonnel.builder().id(1L).build());
+        DeliveryPersonnel currentDeliveryPersonnel = deliveryPersonnelService.getCurrentDeliveryPersonnel();
+        List<Delivery>  deliveries = deliveryRepository.findByDeliveryPersonnel(DeliveryPersonnel.builder().id(currentDeliveryPersonnel.getId()).build());
 
         return deliveries.stream().map(delivery -> modelMapper.map(delivery, DeliveryDto.class)).toList();
     }

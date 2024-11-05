@@ -4,17 +4,19 @@ import com.mealmap.mealmap_backend_api.dto.*;
 import com.mealmap.mealmap_backend_api.entities.RestaurantOwner;
 import com.mealmap.mealmap_backend_api.entities.User;
 import com.mealmap.mealmap_backend_api.entities.enums.Role;
+import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.respositories.RestaurantOwnerRepository;
 import com.mealmap.mealmap_backend_api.services.AuthService;
 import com.mealmap.mealmap_backend_api.services.MenuService;
 import com.mealmap.mealmap_backend_api.services.RestaurantOwnerService;
 import com.mealmap.mealmap_backend_api.services.RestaurantService;
+import com.mealmap.mealmap_backend_api.utils.SignupMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -23,56 +25,37 @@ public class RestaurantOwnerServiceImpl implements RestaurantOwnerService {
     private final AuthService authService;
     private final ModelMapper modelMapper;
     private  final RestaurantOwnerRepository restaurantOwnerRepository;
-    private final RestaurantService restaurantService;
-    private final MenuService menuService;
 
     @Override
     @Transactional
-    public UserDto register(SignupDto signupDto) {
+    public UserDto register(RestaurantOwnerSignupDto restaurantOwnerSignupDto) {
+
+        SignupDto signupDto = SignupMapper.extractUserSpecificDetails(restaurantOwnerSignupDto);
+
         User savedUser = authService.signup(signupDto, Set.of(Role.RESTAURANT_OWNER));
-        createNewRestaurantOwner(savedUser);
+
+        createNewRestaurantOwner(restaurantOwnerSignupDto, savedUser);
 
         return modelMapper.map(savedUser, UserDto.class);
 
     }
 
     @Override
-    public RestaurantOwner createNewRestaurantOwner(User user) {
+    public RestaurantOwner createNewRestaurantOwner(RestaurantOwnerSignupDto restaurantOwnerSignupDto, User user) {
 
         RestaurantOwner restaurantOwner = RestaurantOwner.builder()
                 .user(user)
+                .contactNumber(restaurantOwnerSignupDto.getContactNumber())
                 .build();
 
         return restaurantOwnerRepository.save(restaurantOwner);
     }
 
     @Override
-    public RestaurantDto registerRestaurant(RestaurantDto restaurantDto) {
-        return restaurantService.createNewRestaurant(restaurantDto);
-    }
-
-    @Override
-    public RestaurantDto getRestaurantById(Long restaurantId) {
-        return restaurantService.getRestaurantById(restaurantId);
-    }
-
-    @Override
-    public RestaurantDto getRestaurantByName(String restaurantName) {
-        return restaurantService.getRestaurantByName(restaurantName);
-    }
-
-    @Override
-    public List<RestaurantDto> getAllRestaurants() {
-        return restaurantService.getAllRestaurants();
-    }
-
-    @Override
-    public MenuDto createMenuForARestaurant(Long restaurantId, MenuRequestDto menuRequestDto) {
-        return menuService.createMenuForARestaurant(restaurantId, menuRequestDto);
-    }
-
-    @Override
-    public MenuDto getMenuForARestaurant(Long restaurantId) {
-        return menuService.getMenuForARestaurant(restaurantId);
+    public RestaurantOwner getCurrentRestaurantOwner() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return restaurantOwnerRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException(
+                "Customer not associated with user with id: "+user.getId()
+        ));
     }
 }

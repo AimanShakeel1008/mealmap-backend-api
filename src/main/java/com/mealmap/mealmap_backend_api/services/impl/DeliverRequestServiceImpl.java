@@ -50,11 +50,13 @@ public class DeliverRequestServiceImpl implements DeliveryRequestService {
     @Transactional
     public DeliveryDto acceptDeliveryRequest(Long deliveryRequestId) {
 
+        DeliveryPersonnel currentDeliveryPersonnel = deliveryPersonnelService.getCurrentDeliveryPersonnel();
+
         DeliveryRequest deliveryRequest = deliveryRequestRepository
                 .findById(deliveryRequestId).orElseThrow(() -> new ResourceNotFoundException("Delivery Request not found"));
 
         DeliveryPersonnel deliveryPersonnel = deliveryPersonnelRepository
-                .findById(1L).orElseThrow(() -> new ResourceNotFoundException("Delivery Personnel not found"));
+                .findById(currentDeliveryPersonnel.getId()).orElseThrow(() -> new ResourceNotFoundException("Delivery Personnel not found"));
 
         Delivery delivery = new Delivery();
 

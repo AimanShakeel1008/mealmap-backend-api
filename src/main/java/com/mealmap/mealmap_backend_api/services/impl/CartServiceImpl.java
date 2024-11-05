@@ -10,6 +10,7 @@ import com.mealmap.mealmap_backend_api.respositories.CartRepository;
 import com.mealmap.mealmap_backend_api.respositories.CustomerRepository;
 import com.mealmap.mealmap_backend_api.respositories.MenuItemRepository;
 import com.mealmap.mealmap_backend_api.services.CartService;
+import com.mealmap.mealmap_backend_api.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,14 @@ public class CartServiceImpl implements CartService {
     private final MenuItemRepository menuItemRepository;
     private final ModelMapper modelMapper;
     private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
     @Override
     public CartDto addToCart(Long menuItemId, int quantity) {
 
-        Customer customer = customerRepository.findById(1L)
+        Customer currentCustomer = customerService.getCurrentCustomer();
+
+        Customer customer = customerRepository.findById(currentCustomer.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
 
         Cart cart = cartRepository.findByCustomerId(customer.getId()).orElseGet(Cart::new);

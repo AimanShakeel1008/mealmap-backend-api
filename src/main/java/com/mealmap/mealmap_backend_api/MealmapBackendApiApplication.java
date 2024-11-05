@@ -19,9 +19,4 @@ public class MealmapBackendApiApplication {
 		return new ModelMapper();
 	}
 
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
 }

@@ -2,6 +2,10 @@ package com.mealmap.mealmap_backend_api.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,5 +25,13 @@ public class DeliveryPersonnel {
     private User user;
 
     private Boolean available;
+
+    private String contactNumber;
+
+    @CreationTimestamp
+    private LocalDateTime createdTime;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedTime;
 
 }

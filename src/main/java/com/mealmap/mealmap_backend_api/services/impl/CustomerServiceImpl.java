@@ -1,17 +1,17 @@
 package com.mealmap.mealmap_backend_api.services.impl;
 
-import com.mealmap.mealmap_backend_api.dto.MenuDto;
-import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
-import com.mealmap.mealmap_backend_api.dto.SignupDto;
-import com.mealmap.mealmap_backend_api.dto.UserDto;
+import com.mealmap.mealmap_backend_api.dto.*;
 import com.mealmap.mealmap_backend_api.entities.Customer;
 import com.mealmap.mealmap_backend_api.entities.User;
 import com.mealmap.mealmap_backend_api.entities.enums.Role;
+import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.respositories.CustomerRepository;
 import com.mealmap.mealmap_backend_api.services.*;
+import com.mealmap.mealmap_backend_api.utils.SignupMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,22 +30,36 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public UserDto register(SignupDto signupDto) {
+    public UserDto register(CustomerSignupDto customerSignupDto) {
+
+        SignupDto signupDto = SignupMapper.extractUserSpecificDetails(customerSignupDto);
+
         User savedUser = authService.signup(signupDto, Set.of(Role.CUSTOMER));
-        createNewCustomer(savedUser);
+
+        createNewCustomer(customerSignupDto, savedUser);
 
         return modelMapper.map(savedUser, UserDto.class);
 
     }
 
     @Override
-    public Customer createNewCustomer(User user) {
+    public Customer createNewCustomer(CustomerSignupDto customerSignupDto, User user) {
 
         Customer customer = Customer.builder()
                 .user(user)
+                .address(customerSignupDto.getAddress())
+                .contactNumber(customerSignupDto.getContactNumber())
                 .build();
 
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer getCurrentCustomer() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return customerRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException(
+                "Customer not associated with user with id: "+user.getId()
+        ));
     }
 
     @Override

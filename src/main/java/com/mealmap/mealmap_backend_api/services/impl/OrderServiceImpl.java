@@ -3,6 +3,7 @@ package com.mealmap.mealmap_backend_api.services.impl;
 import com.mealmap.mealmap_backend_api.dto.DeliveryRequestDto;
 import com.mealmap.mealmap_backend_api.dto.OrderDto;
 import com.mealmap.mealmap_backend_api.entities.Cart;
+import com.mealmap.mealmap_backend_api.entities.Customer;
 import com.mealmap.mealmap_backend_api.entities.DeliveryRequest;
 import com.mealmap.mealmap_backend_api.entities.Order;
 import com.mealmap.mealmap_backend_api.entities.enums.*;
@@ -11,6 +12,7 @@ import com.mealmap.mealmap_backend_api.respositories.CartRepository;
 import com.mealmap.mealmap_backend_api.respositories.DeliveryRequestRepository;
 import com.mealmap.mealmap_backend_api.respositories.OrderRepository;
 import com.mealmap.mealmap_backend_api.services.CartService;
+import com.mealmap.mealmap_backend_api.services.CustomerService;
 import com.mealmap.mealmap_backend_api.services.OrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +31,12 @@ public class OrderServiceImpl implements OrderService {
     private final DeliveryRequestRepository deliveryRequestRepository;
     private final CartService cartService;
     private final ModelMapper modelMapper;
+    private final CustomerService customerService;
 
     @Override
     public OrderDto placeOrder(PaymentMode paymentMode) {
-        Cart cart = cartRepository.findByCustomerId(1L).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
+        Customer currentCustomer = customerService.getCurrentCustomer();
+        Cart cart = cartRepository.findByCustomerId(currentCustomer.getId()).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
 
         BigDecimal itemTotal = cart.getItems().stream()
                 .map(item -> BigDecimal.valueOf(item.getMenuItem().getPrice()).multiply(BigDecimal.valueOf(item.getQuantity())))
