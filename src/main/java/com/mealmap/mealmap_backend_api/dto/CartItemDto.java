@@ -1,6 +1,5 @@
 package com.mealmap.mealmap_backend_api.dto;
 
-import com.mealmap.mealmap_backend_api.entities.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

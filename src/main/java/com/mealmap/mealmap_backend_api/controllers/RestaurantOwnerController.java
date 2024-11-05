@@ -1,7 +1,6 @@
 package com.mealmap.mealmap_backend_api.controllers;
 
 import com.mealmap.mealmap_backend_api.dto.*;
-import com.mealmap.mealmap_backend_api.entities.enums.OrderStatus;
 import com.mealmap.mealmap_backend_api.services.MenuService;
 import com.mealmap.mealmap_backend_api.services.OrderService;
 import com.mealmap.mealmap_backend_api.services.RestaurantOwnerService;

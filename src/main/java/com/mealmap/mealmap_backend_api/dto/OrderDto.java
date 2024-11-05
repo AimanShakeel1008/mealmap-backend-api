@@ -1,6 +1,5 @@
 package com.mealmap.mealmap_backend_api.dto;
 
-import com.mealmap.mealmap_backend_api.entities.Restaurant;
 import com.mealmap.mealmap_backend_api.entities.enums.OrderStatus;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentStatus;

@@ -1,9 +1,7 @@
 package com.mealmap.mealmap_backend_api.controllers;
 
 import com.mealmap.mealmap_backend_api.dto.*;
-import com.mealmap.mealmap_backend_api.entities.Cart;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
-import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.services.CartService;
 import com.mealmap.mealmap_backend_api.services.CustomerService;
 import com.mealmap.mealmap_backend_api.services.OrderService;

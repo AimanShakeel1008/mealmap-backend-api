@@ -5,7 +5,6 @@ import com.mealmap.mealmap_backend_api.entities.Restaurant;
 import com.mealmap.mealmap_backend_api.entities.RestaurantOwner;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.exceptions.RuntimeConflictException;
-import com.mealmap.mealmap_backend_api.respositories.MenuRepository;
 import com.mealmap.mealmap_backend_api.respositories.RestaurantRepository;
 import com.mealmap.mealmap_backend_api.services.RestaurantOwnerService;
 import com.mealmap.mealmap_backend_api.services.RestaurantService;

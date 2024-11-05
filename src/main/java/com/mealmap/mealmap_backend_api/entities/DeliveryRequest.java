@@ -1,7 +1,6 @@
 package com.mealmap.mealmap_backend_api.entities;
 
 import com.mealmap.mealmap_backend_api.entities.enums.DeliveryRequestStatus;
-import com.mealmap.mealmap_backend_api.entities.enums.DeliveryStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
