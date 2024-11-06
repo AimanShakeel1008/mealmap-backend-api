@@ -59,7 +59,16 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public List<RestaurantDto> getAllRestaurants() {
+
         return restaurantRepository.findAll()
+                .stream()
+                .map(restaurant -> modelMapper.map(restaurant, RestaurantDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<RestaurantDto> getAllRestaurantsOfAnOwner(RestaurantOwner restaurantOwner) {
+        return  restaurantRepository.findByOwner(restaurantOwner)
                 .stream()
                 .map(restaurant -> modelMapper.map(restaurant, RestaurantDto.class))
                 .toList();

@@ -78,11 +78,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public MenuDto getMenuForARestaurant(Long restaurantId) {
-        return menuService.getMenuForARestaurant(restaurantId);
-    }
-
-    @Override
     public List<RestaurantDto> getRestaurantsByDishName(String dishName) {
         return menuItemService.getRestaurantsByDishName(dishName);
     }

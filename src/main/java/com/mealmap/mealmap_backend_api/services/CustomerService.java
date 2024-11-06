@@ -21,8 +21,6 @@ public interface CustomerService {
 
     RestaurantDto getRestaurantByName(String restaurantName);
 
-    MenuDto getMenuForARestaurant(Long restaurantId);
-
     List<RestaurantDto> getRestaurantsByDishName(String dishName);
 
     List<RestaurantDto> getRestaurantsByCuisine(String cuisineType);

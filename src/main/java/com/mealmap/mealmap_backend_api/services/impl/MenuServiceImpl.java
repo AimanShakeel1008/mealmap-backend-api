@@ -5,6 +5,8 @@ import com.mealmap.mealmap_backend_api.dto.MenuRequestDto;
 import com.mealmap.mealmap_backend_api.entities.Menu;
 import com.mealmap.mealmap_backend_api.entities.MenuItem;
 import com.mealmap.mealmap_backend_api.entities.Restaurant;
+import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
+import com.mealmap.mealmap_backend_api.exceptions.RuntimeConflictException;
 import com.mealmap.mealmap_backend_api.respositories.MenuRepository;
 import com.mealmap.mealmap_backend_api.respositories.RestaurantRepository;
 import com.mealmap.mealmap_backend_api.services.MenuService;
@@ -27,7 +29,11 @@ public class MenuServiceImpl implements MenuService {
     @Transactional
     public MenuDto createMenuForARestaurant(Long restaurantId, MenuRequestDto menuRequestDto) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new RuntimeException("Restaurant not found with id: "+restaurantId));
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + restaurantId));
+
+        if (menuRepository.findByTitleAndRestaurant(menuRequestDto.getTitle(), restaurant).isPresent()) {
+            throw new RuntimeConflictException("Menu with this title is already present in this restaurant");
+        }
 
         Menu menu = new Menu();
         menu.setTitle(menuRequestDto.getTitle());
@@ -50,11 +56,15 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public MenuDto getMenuForARestaurant(Long restaurantId) {
+    public List<MenuDto> getMenuForARestaurant(Long restaurantId) {
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
-                .orElseThrow(() -> new RuntimeException("Restaurant not found with id: "+restaurantId));
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + restaurantId));
 
-        return modelMapper.map(menuRepository.findByRestaurant(restaurant), MenuDto.class);
+        return menuRepository.findByRestaurant(restaurant)
+                .stream()
+                .map(menu -> modelMapper.map(menu, MenuDto.class))
+                .toList();
+
     }
 }

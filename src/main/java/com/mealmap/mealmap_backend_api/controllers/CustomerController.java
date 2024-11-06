@@ -4,6 +4,7 @@ import com.mealmap.mealmap_backend_api.dto.*;
 import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
 import com.mealmap.mealmap_backend_api.services.CartService;
 import com.mealmap.mealmap_backend_api.services.CustomerService;
+import com.mealmap.mealmap_backend_api.services.MenuService;
 import com.mealmap.mealmap_backend_api.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/customer")
 @RequiredArgsConstructor
-@Secured("ROLE_CUSTOMER")
 public class CustomerController {
 
     private final CustomerService customerService;
     private final CartService cartService;
     private final OrderService orderService;
+    private final MenuService menuService;
 
     @PostMapping("/register")
     ResponseEntity<UserDto> register(@RequestBody CustomerSignupDto customerSignupDto) {
@@ -48,8 +49,8 @@ public class CustomerController {
 
     @Secured("ROLE_CUSTOMER")
     @GetMapping("/restaurants/{restaurantId}/menu")
-    ResponseEntity<MenuDto> getMenuForARestaurant(@PathVariable Long restaurantId) {
-        return new ResponseEntity<>(customerService.getMenuForARestaurant(restaurantId), HttpStatus.OK);
+    ResponseEntity<List<MenuDto>> getMenuForARestaurant(@PathVariable Long restaurantId) {
+        return new ResponseEntity<>(menuService.getMenuForARestaurant(restaurantId), HttpStatus.OK);
     }
 
     @Secured("ROLE_CUSTOMER")

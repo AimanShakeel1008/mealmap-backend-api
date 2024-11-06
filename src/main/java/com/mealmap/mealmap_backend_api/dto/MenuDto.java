@@ -19,4 +19,5 @@ public class MenuDto {
     private String title;
 
     private List<MenuItemDto> items;
+
 }

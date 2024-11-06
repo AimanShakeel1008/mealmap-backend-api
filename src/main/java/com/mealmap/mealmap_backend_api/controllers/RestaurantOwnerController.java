@@ -1,6 +1,7 @@
 package com.mealmap.mealmap_backend_api.controllers;
 
 import com.mealmap.mealmap_backend_api.dto.*;
+import com.mealmap.mealmap_backend_api.entities.RestaurantOwner;
 import com.mealmap.mealmap_backend_api.services.MenuService;
 import com.mealmap.mealmap_backend_api.services.OrderService;
 import com.mealmap.mealmap_backend_api.services.RestaurantOwnerService;
@@ -36,8 +37,9 @@ public class RestaurantOwnerController {
 
     @Secured("ROLE_RESTAURANT_OWNER")
     @GetMapping("/restaurants")
-    ResponseEntity<List<RestaurantDto>> getAllRestaurants() {
-        return new ResponseEntity<>(restaurantService.getAllRestaurants(), HttpStatus.OK);
+    ResponseEntity<List<RestaurantDto>> getAllRestaurantsOfAnOwner() {
+        RestaurantOwner currentRestaurantOwner = restaurantOwnerService.getCurrentRestaurantOwner();
+        return new ResponseEntity<>(restaurantService.getAllRestaurantsOfAnOwner(currentRestaurantOwner), HttpStatus.OK);
     }
 
     @Secured("ROLE_RESTAURANT_OWNER")
@@ -60,9 +62,10 @@ public class RestaurantOwnerController {
 
     @Secured("ROLE_RESTAURANT_OWNER")
     @GetMapping("/restaurants/{restaurantId}/menu")
-    ResponseEntity<MenuDto> getMenuForARestaurant(@PathVariable Long restaurantId) {
+    ResponseEntity<List<MenuDto>> getMenuForARestaurant(@PathVariable Long restaurantId) {
         return new ResponseEntity<>(menuService.getMenuForARestaurant(restaurantId), HttpStatus.OK);
     }
+
 
     @Secured("ROLE_RESTAURANT_OWNER")
     @PutMapping("/order/{orderId}/accept")
