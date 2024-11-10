@@ -1,6 +1,9 @@
 package com.mealmap.mealmap_backend_api.services.impl;
 
+import com.mealmap.mealmap_backend_api.dto.MenuItemDto;
 import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
+import com.mealmap.mealmap_backend_api.entities.Menu;
+import com.mealmap.mealmap_backend_api.entities.MenuItem;
 import com.mealmap.mealmap_backend_api.entities.Restaurant;
 import com.mealmap.mealmap_backend_api.entities.RestaurantOwner;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
@@ -13,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +38,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant mappedRestaurant = modelMapper.map(restaurantDto, Restaurant.class);
 
         mappedRestaurant.setOpen(true);
+        mappedRestaurant.setActive(true);
         mappedRestaurant.setOwner(RestaurantOwner.builder().id(currentRestaurantOwner.getId()).build());
 
         Restaurant savedRestaurant = restaurantRepository.save(mappedRestaurant);
@@ -80,5 +85,65 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .stream()
                 .map(restaurant -> modelMapper.map(restaurant, RestaurantDto.class))
                 .toList();
+    }
+
+    @Override
+    public RestaurantDto updateRestaurantDetails(Long restaurantId, RestaurantDto restaurantDto) {
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + restaurantId));
+
+        RestaurantOwner currentRestaurantOwner = restaurantOwnerService.getCurrentRestaurantOwner();
+
+        if (!Objects.equals(restaurant.getOwner().getId(), currentRestaurantOwner.getId())) {
+            throw new RuntimeException("You can not update the details of the restaurant as you are not the owner of this restaurant");
+        }
+
+        restaurant.setName(restaurantDto.getName());
+        restaurant.setAddress(restaurantDto.getAddress());
+        restaurant.setHoursOfOperation(restaurantDto.getHoursOfOperation());
+        restaurant.setCuisineType(restaurantDto.getCuisineType());
+        restaurant.setContactNumber(restaurantDto.getContactNumber());
+
+        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
+
+        return modelMapper.map(savedRestaurant, RestaurantDto.class);
+    }
+
+    @Override
+    public RestaurantDto updateAvailabilityOfAMenuItemInAMenu(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + restaurantId));
+
+        RestaurantOwner currentRestaurantOwner = restaurantOwnerService.getCurrentRestaurantOwner();
+
+        if (!Objects.equals(restaurant.getOwner().getId(), currentRestaurantOwner.getId())) {
+            throw new RuntimeException("You can not update the menu of the restaurant as you are not the owner of this restaurant");
+        }
+
+        restaurant.setOpen(!restaurant.getOpen());
+
+        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
+
+        return modelMapper.map(savedRestaurant, RestaurantDto.class);
+    }
+
+    @Override
+    public RestaurantDto updateActiveStateOfAMenuItemInAMenu(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + restaurantId));
+
+        RestaurantOwner currentRestaurantOwner = restaurantOwnerService.getCurrentRestaurantOwner();
+
+        if (!Objects.equals(restaurant.getOwner().getId(), currentRestaurantOwner.getId())) {
+            throw new RuntimeException("You can not update the menu of the restaurant as you are not the owner of this restaurant");
+        }
+
+        restaurant.setActive(!restaurant.getActive());
+        restaurant.setOpen(!restaurant.getActive());
+
+        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
+
+        return modelMapper.map(savedRestaurant, RestaurantDto.class);
     }
 }

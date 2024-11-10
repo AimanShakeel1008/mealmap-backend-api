@@ -55,6 +55,24 @@ public class RestaurantOwnerController {
     }
 
     @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}")
+    ResponseEntity<RestaurantDto> updateRestaurantDetails(@PathVariable Long restaurantId, @RequestBody RestaurantDto restaurantDto) {
+        return new ResponseEntity<>(restaurantService.updateRestaurantDetails(restaurantId, restaurantDto), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/updateAvailability")
+    ResponseEntity<RestaurantDto> updateAvailabilityOfARestaurant(@PathVariable Long restaurantId) {
+        return new ResponseEntity<>(restaurantService.updateAvailabilityOfAMenuItemInAMenu(restaurantId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/updateActiveState")
+    ResponseEntity<RestaurantDto> updateActiveStateOfARestaurant(@PathVariable Long restaurantId) {
+        return new ResponseEntity<>(restaurantService.updateActiveStateOfAMenuItemInAMenu(restaurantId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
     @PostMapping("/restaurants/{restaurantId}/menu")
     ResponseEntity<MenuDto> createMenuForARestaurant(@PathVariable Long restaurantId, @RequestBody MenuRequestDto menuRequestDto) {
         return new ResponseEntity<>(menuService.createMenuForARestaurant(restaurantId, menuRequestDto), HttpStatus.CREATED);
@@ -64,6 +82,36 @@ public class RestaurantOwnerController {
     @GetMapping("/restaurants/{restaurantId}/menu")
     ResponseEntity<List<MenuDto>> getMenuForARestaurant(@PathVariable Long restaurantId) {
         return new ResponseEntity<>(menuService.getMenuForARestaurant(restaurantId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/menu/{menuId}")
+    ResponseEntity<MenuDto> addMenuItemInAMenu(@PathVariable Long restaurantId, @PathVariable Long menuId, @RequestBody MenuItemDto menuItem) {
+        return new ResponseEntity<>(menuService.addMenuItemInAMenu(restaurantId, menuId, menuItem), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @GetMapping("/restaurants/{restaurantId}/menu/{menuId}/menuItem/{menuItemId}")
+    ResponseEntity<MenuItemDto> getMenuItemInAMenu(@PathVariable Long restaurantId, @PathVariable Long menuId, @PathVariable Long menuItemId) {
+        return new ResponseEntity<>(menuService.getMenuItemInAMenu(restaurantId, menuId, menuItemId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/menuItem/{menuItemId}")
+    ResponseEntity<MenuItemDto> updateAMenuItemInAMenu(@PathVariable Long restaurantId, @PathVariable Long menuId, @PathVariable Long menuItemId, @RequestBody MenuItemDto menuItem) {
+        return new ResponseEntity<>(menuService.updateAMenuItemInAMenu(restaurantId, menuId, menuItemId, menuItem), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/menuItem/{menuItemId}/updateAvailability")
+    ResponseEntity<MenuItemDto> updateAvailabilityOfAMenuItemInAMenu(@PathVariable Long restaurantId, @PathVariable Long menuId, @PathVariable Long menuItemId) {
+        return new ResponseEntity<>(menuService.updateAvailabilityOfAMenuItemInAMenu(restaurantId, menuId, menuItemId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/menu/{menuId}/menuItem/{menuItemId}/updateActiveState")
+    ResponseEntity<MenuItemDto> updateActiveStateOfAMenuItemInAMenu(@PathVariable Long restaurantId, @PathVariable Long menuId, @PathVariable Long menuItemId) {
+        return new ResponseEntity<>(menuService.updateActiveStateOfAMenuItemInAMenu(restaurantId, menuId, menuItemId), HttpStatus.OK);
     }
 
 

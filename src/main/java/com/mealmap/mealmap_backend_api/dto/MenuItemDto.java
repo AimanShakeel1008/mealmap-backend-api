@@ -1,9 +1,6 @@
 package com.mealmap.mealmap_backend_api.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -17,4 +14,5 @@ public class MenuItemDto {
     private String description;
     private Double price;
     private Boolean available;
+    private Boolean active;
 }

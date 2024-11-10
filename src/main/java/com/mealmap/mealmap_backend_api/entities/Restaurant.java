@@ -22,6 +22,7 @@ public class Restaurant {
     private String cuisineType;
     private String contactNumber;
     private Boolean open;
+    private Boolean active;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)

@@ -19,4 +19,6 @@ public class RestaurantDto {
     private String hoursOfOperation;
     private String cuisineType;
     private String contactNumber;
+    private Boolean open;
+    private Boolean active;
 }

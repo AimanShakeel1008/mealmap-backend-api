@@ -18,4 +18,10 @@ public interface RestaurantService {
     List<RestaurantDto> getAllRestaurantsOfAnOwner(RestaurantOwner restaurantOwner);
 
     List<RestaurantDto> getRestaurantsByCuisine(String cuisineType);
+
+    RestaurantDto updateRestaurantDetails(Long restaurantId, RestaurantDto restaurantDto);
+
+    RestaurantDto updateAvailabilityOfAMenuItemInAMenu(Long restaurantId);
+
+    RestaurantDto updateActiveStateOfAMenuItemInAMenu(Long restaurantId);
 }

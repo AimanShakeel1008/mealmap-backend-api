@@ -19,6 +19,7 @@ public class MenuItem {
     private String description;
     private Double price;
     private Boolean available;
+    private Boolean active;
 
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false)
