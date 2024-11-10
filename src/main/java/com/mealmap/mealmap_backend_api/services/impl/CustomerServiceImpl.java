@@ -64,26 +64,48 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<RestaurantDto> getAllRestaurants() {
-        return restaurantService.getAllRestaurants();
+        return restaurantService.getAllRestaurants()
+                .stream()
+                .filter(RestaurantDto::getActive)
+                .toList();
     }
 
     @Override
     public RestaurantDto getRestaurantById(Long restaurantId) {
-        return restaurantService.getRestaurantById(restaurantId);
+        RestaurantDto restaurantDto = restaurantService.getRestaurantById(restaurantId);
+
+        if(!restaurantDto.getActive()) {
+            throw new ResourceNotFoundException("No active restaurant found with id: "+restaurantId);
+        }
+
+        return  restaurantDto;
     }
 
     @Override
     public RestaurantDto getRestaurantByName(String restaurantName) {
-        return restaurantService.getRestaurantByName(restaurantName);
+
+        RestaurantDto restaurantDto = restaurantService.getRestaurantByName(restaurantName);
+
+        if(!restaurantDto.getActive()) {
+            throw new ResourceNotFoundException("No active restaurant found with name: "+restaurantName);
+        }
+
+        return  restaurantDto;
     }
 
     @Override
     public List<RestaurantDto> getRestaurantsByDishName(String dishName) {
-        return menuItemService.getRestaurantsByDishName(dishName);
+        return menuItemService.getRestaurantsByDishName(dishName)
+                .stream()
+                .filter(RestaurantDto::getActive)
+                .toList();
     }
 
     @Override
     public List<RestaurantDto> getRestaurantsByCuisine(String cuisineType) {
-        return restaurantService.getRestaurantsByCuisine(cuisineType);
+        return restaurantService.getRestaurantsByCuisine(cuisineType)
+                .stream()
+                .filter(RestaurantDto::getActive)
+                .toList();
     }
 }

@@ -73,11 +73,7 @@ public class DeliverRequestServiceImpl implements DeliveryRequestService {
 
         Order order = deliveryRequest.getOrder();
 
-        order.setOrderStatus(OrderStatus.IN_PROGRESS);
-
-        Order savedOrder = orderRepository.save(order);
-
-        delivery.setOrder(savedOrder);
+        delivery.setOrder(order);
         delivery.setDeliveryStatus(DeliveryStatus.DELIVERY_PERSON_ASSIGNED);
         delivery.setDeliveryPersonnel(deliveryPersonnel);
 

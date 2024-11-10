@@ -20,4 +20,6 @@ public interface MenuService {
     MenuItemDto updateAvailabilityOfAMenuItemInAMenu(Long restaurantId, Long menuId, Long menuItemId);
 
     MenuItemDto updateActiveStateOfAMenuItemInAMenu(Long restaurantId, Long menuId, Long menuItemId);
+
+    MenuDto getMenuForARestaurantById(Long restaurantId, Long menuId);
 }

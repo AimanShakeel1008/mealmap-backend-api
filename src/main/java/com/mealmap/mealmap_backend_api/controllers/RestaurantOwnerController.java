@@ -85,6 +85,12 @@ public class RestaurantOwnerController {
     }
 
     @Secured("ROLE_RESTAURANT_OWNER")
+    @GetMapping("/restaurants/{restaurantId}/menu/{menuId}")
+    ResponseEntity<MenuDto> getMenuForARestaurantById(@PathVariable Long restaurantId, @PathVariable Long menuId) {
+        return new ResponseEntity<>(menuService.getMenuForARestaurantById(restaurantId, menuId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
     @PutMapping("/restaurants/{restaurantId}/menu/{menuId}")
     ResponseEntity<MenuDto> addMenuItemInAMenu(@PathVariable Long restaurantId, @PathVariable Long menuId, @RequestBody MenuItemDto menuItem) {
         return new ResponseEntity<>(menuService.addMenuItemInAMenu(restaurantId, menuId, menuItem), HttpStatus.OK);
@@ -116,8 +122,38 @@ public class RestaurantOwnerController {
 
 
     @Secured("ROLE_RESTAURANT_OWNER")
-    @PutMapping("/order/{orderId}/accept")
-    ResponseEntity<OrderDto> acceptOrder(@PathVariable Long orderId) {
-        return new ResponseEntity<>(orderService.updateOrderStatus(orderId), HttpStatus.OK);
+    @GetMapping("/restaurants/{restaurantId}/orders")
+    ResponseEntity<List<OrderDto>> getAllOrdersOfARestaurant(@PathVariable Long restaurantId) {
+        return new ResponseEntity<>(orderService.getAllOrdersOfARestaurant(restaurantId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @GetMapping("/restaurants/{restaurantId}/orders/{orderId}")
+    ResponseEntity<OrderDto> getOrderOfARestaurantByOrderId(@PathVariable Long restaurantId, @PathVariable Long orderId) {
+        return new ResponseEntity<>(orderService.getOrderOfARestaurantByOrderId(restaurantId, orderId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/orders/{orderId}/accept")
+    ResponseEntity<OrderDto> acceptOrder(@PathVariable Long orderId, @PathVariable Long restaurantId) {
+        return new ResponseEntity<>(orderService.acceptOrder(orderId, restaurantId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/orders/{orderId}/updateOrderStatusToInProgress")
+    ResponseEntity<OrderDto> updateStatusToInProgress(@PathVariable Long orderId, @PathVariable Long restaurantId) {
+        return new ResponseEntity<>(orderService.updateStatusToInProgress(orderId, restaurantId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/orders/{orderId}/updateOrderStatusToOrderReady")
+    ResponseEntity<OrderDto> updateStatusToOrderReady(@PathVariable Long orderId, @PathVariable Long restaurantId) {
+        return new ResponseEntity<>(orderService.updateStatusToOrderReady(orderId, restaurantId), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_RESTAURANT_OWNER")
+    @PutMapping("/restaurants/{restaurantId}/orders/{orderId}/updateOrderStatusToReceivedByDeliveryPersonnel")
+    ResponseEntity<OrderDto> updateStatusToReceivedByDeliveryPersonnel(@PathVariable Long orderId, @PathVariable Long restaurantId) {
+        return new ResponseEntity<>(orderService.updateStatusToReceivedByDeliveryPersonnel(orderId, restaurantId), HttpStatus.OK);
     }
 }

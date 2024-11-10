@@ -206,4 +206,15 @@ public class MenuServiceImpl implements MenuService {
 
         return modelMapper.map(savedMenuItem, MenuItemDto.class);
     }
+
+    @Override
+    public MenuDto getMenuForARestaurantById(Long restaurantId, Long menuId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + restaurantId));
+
+        Menu menu = menuRepository.findByRestaurantAndId(restaurant, menuId)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu not found with id: " + menuId));
+
+        return modelMapper.map(menu, MenuDto.class);
+    }
 }
