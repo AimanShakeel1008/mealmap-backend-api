@@ -1,10 +1,13 @@
 package com.mealmap.mealmap_backend_api.services.impl;
 
 import com.mealmap.mealmap_backend_api.dto.*;
+import com.mealmap.mealmap_backend_api.entities.Cart;
 import com.mealmap.mealmap_backend_api.entities.Customer;
+import com.mealmap.mealmap_backend_api.entities.Menu;
 import com.mealmap.mealmap_backend_api.entities.User;
 import com.mealmap.mealmap_backend_api.entities.enums.Role;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
+import com.mealmap.mealmap_backend_api.respositories.CartRepository;
 import com.mealmap.mealmap_backend_api.respositories.CustomerRepository;
 import com.mealmap.mealmap_backend_api.services.*;
 import com.mealmap.mealmap_backend_api.utils.SignupMapper;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final RestaurantService restaurantService;
     private final MenuService menuService;
     private final MenuItemService menuItemService;
+    private final CartRepository cartRepository;
 
     @Override
     @Transactional
@@ -43,6 +48,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    @Transactional
     public Customer createNewCustomer(CustomerSignupDto customerSignupDto, User user) {
 
         Customer customer = Customer.builder()
@@ -51,7 +57,15 @@ public class CustomerServiceImpl implements CustomerService {
                 .contactNumber(customerSignupDto.getContactNumber())
                 .build();
 
-        return customerRepository.save(customer);
+        Customer savedCustomer = customerRepository.save(customer);
+
+        Cart cart = cartRepository.findByCustomer(customer).orElseGet(Cart::new);
+
+        cart.setCustomer(savedCustomer);
+
+        cartRepository.save(cart);
+
+        return savedCustomer;
     }
 
     @Override
@@ -107,5 +121,47 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .filter(RestaurantDto::getActive)
                 .toList();
+    }
+
+    @Override
+    public List<MenuDto> getMenuForARestaurant(Long restaurantId) {
+        List<MenuDto> menuForARestaurant = menuService.getMenuForARestaurant(restaurantId);
+
+        menuForARestaurant.forEach(menu ->
+                menu.setItems(
+                        menu.getItems()
+                                .stream()
+                                .filter(MenuItemDto::getActive)
+                                .collect(Collectors.toList())
+                )
+        );
+
+        return menuForARestaurant;
+    }
+
+    @Override
+    public MenuDto getMenuForARestaurantById(Long restaurantId, Long menuId) {
+
+        MenuDto menu = menuService.getMenuForARestaurantById(restaurantId, menuId);
+
+        menu.setItems(
+                menu.getItems()
+                        .stream()
+                        .filter(MenuItemDto::getActive)
+                        .collect(Collectors.toList())
+        );
+
+        return menu;
+    }
+
+    @Override
+    public MenuItemDto getMenuItemForARestaurantById(Long restaurantId, Long menuId, Long menuItemId) {
+
+        MenuItemDto menuItem = menuService.getMenuItemInAMenu(restaurantId, menuId, menuItemId);
+
+        if(!menuItem.getActive()) {
+            throw new ResourceNotFoundException("No active menu item found with id: "+menuItemId);
+        }
+        return menuItem;
     }
 }

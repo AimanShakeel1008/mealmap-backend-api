@@ -1,9 +1,6 @@
 package com.mealmap.mealmap_backend_api.services;
 
-import com.mealmap.mealmap_backend_api.dto.CustomerSignupDto;
-import com.mealmap.mealmap_backend_api.dto.MenuDto;
-import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
-import com.mealmap.mealmap_backend_api.dto.UserDto;
+import com.mealmap.mealmap_backend_api.dto.*;
 import com.mealmap.mealmap_backend_api.entities.Customer;
 import com.mealmap.mealmap_backend_api.entities.User;
 
@@ -24,4 +21,10 @@ public interface CustomerService {
     List<RestaurantDto> getRestaurantsByDishName(String dishName);
 
     List<RestaurantDto> getRestaurantsByCuisine(String cuisineType);
+
+    List<MenuDto> getMenuForARestaurant(Long restaurantId);
+
+    MenuDto getMenuForARestaurantById(Long restaurantId, Long menuId);
+
+    MenuItemDto getMenuItemForARestaurantById(Long restaurantId, Long menuId, Long menuItemId);
 }

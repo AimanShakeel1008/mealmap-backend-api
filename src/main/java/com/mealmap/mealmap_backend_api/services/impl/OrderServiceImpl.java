@@ -31,15 +31,15 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerService customerService;
     private final RestaurantOwnerService restaurantOwnerService;
     private final RestaurantRepository restaurantRepository;
-    private DeliveryRepository deliveryRepository;
+    private final DeliveryRepository deliveryRepository;
 
     @Override
     public OrderDto placeOrder(PaymentMode paymentMode) {
         Customer currentCustomer = customerService.getCurrentCustomer();
-        Cart cart = cartRepository.findByCustomerId(currentCustomer.getId()).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
+        Cart cart = cartRepository.findByCustomer(currentCustomer).orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
 
         BigDecimal itemTotal = cart.getItems().stream()
-                .map(item -> BigDecimal.valueOf(item.getMenuItem().getPrice()).multiply(BigDecimal.valueOf(item.getQuantity())))
+                .map(item -> BigDecimal.valueOf(item.getSellingPrice()).multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // Calculate taxes and delivery charges
@@ -189,6 +189,25 @@ public class OrderServiceImpl implements OrderService {
         }
 
         Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: "+orderId));
+
+        return modelMapper.map(order, OrderDto.class);
+    }
+
+    @Override
+    public List<OrderDto> getAllOrdersOfACustomer() {
+        Customer currentCustomer = customerService.getCurrentCustomer();
+
+        List<Order> orderList = orderRepository.findByCustomer(currentCustomer);
+
+        return orderList.stream().map(order -> modelMapper.map(order, OrderDto.class)).toList();
+    }
+
+    @Override
+    public OrderDto getOrdersOfACustomerByOrderId(Long orderId) {
+        Customer currentCustomer = customerService.getCurrentCustomer();
+
+        Order order = orderRepository.findByCustomerAndId(currentCustomer, orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: "+orderId));
 
         return modelMapper.map(order, OrderDto.class);

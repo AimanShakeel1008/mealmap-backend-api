@@ -9,4 +9,6 @@ public interface DeliveryRequestService {
     List<DeliveryRequestDto> getAllDeliveryRequests();
 
     DeliveryDto acceptDeliveryRequest(Long deliveryRequestId);
+
+    DeliveryRequestDto getDeliveryRequestById(Long deliveryRequestId);
 }

@@ -18,6 +18,8 @@ public class CartItem {
     @ManyToOne
     private MenuItem menuItem;
 
+    private Double sellingPrice;
+
     @ManyToOne
     private Cart cart;
 

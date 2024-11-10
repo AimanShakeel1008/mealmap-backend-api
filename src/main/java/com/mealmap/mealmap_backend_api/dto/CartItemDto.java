@@ -13,6 +13,7 @@ public class CartItemDto {
 
     private Long id;
     private MenuItemDto menuItem;
+    private Double sellingPrice;
     //private CartDto cart;
     private int quantity;
 }

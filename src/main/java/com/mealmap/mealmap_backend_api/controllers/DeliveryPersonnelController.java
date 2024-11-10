@@ -39,6 +39,14 @@ public class DeliveryPersonnelController {
     }
 
     @Secured("ROLE_DELIVERY_PERSONNEL")
+    @GetMapping("/deliveryRequests/{deliveryRequestId}")
+    ResponseEntity<DeliveryRequestDto> getDeliveryRequestById(@PathVariable Long deliveryRequestId) {
+        DeliveryRequestDto deliveryRequestDtoList = deliveryRequestService.getDeliveryRequestById(deliveryRequestId);
+
+        return new ResponseEntity<>(deliveryRequestDtoList, HttpStatus.OK);
+    }
+
+    @Secured("ROLE_DELIVERY_PERSONNEL")
     @PutMapping("/deliveryRequests/{deliveryRequestId}")
     ResponseEntity<DeliveryDto> acceptDeliveryRequest(@PathVariable Long deliveryRequestId) {
 
@@ -49,16 +57,56 @@ public class DeliveryPersonnelController {
 
     @Secured("ROLE_DELIVERY_PERSONNEL")
     @GetMapping("/deliveries")
-    ResponseEntity<List<DeliveryDto>> getAllDeliveries() {
-        List<DeliveryDto> deliveryDtoList = deliveryService.getAllDeliveries();
+    ResponseEntity<List<DeliveryDto>> getAllDeliveriesOfADeliveryPersonnel() {
+        List<DeliveryDto> deliveryDtoList = deliveryService.getAllDeliveriesOfADeliveryPersonnel();
 
         return new ResponseEntity<>(deliveryDtoList, HttpStatus.OK);
     }
 
     @Secured("ROLE_DELIVERY_PERSONNEL")
-    @PutMapping("/deliveries/{deliveryId}")
-    ResponseEntity<DeliveryDto> updateDeliveryStatus(@PathVariable Long deliveryId, @RequestParam DeliveryStatus deliveryStatus) {
-        DeliveryDto deliveryDto = deliveryService.updateDeliveryStatus(deliveryId, deliveryStatus);
+    @GetMapping("/deliveries/{deliveryId}")
+    ResponseEntity<DeliveryDto> getDeliveryByDeliveryId(@PathVariable Long deliveryId) {
+        DeliveryDto deliveryDto = deliveryService.getDeliveryByDeliveryId(deliveryId);
+
+        return new ResponseEntity<>(deliveryDto, HttpStatus.OK);
+    }
+
+    @Secured("ROLE_DELIVERY_PERSONNEL")
+    @PutMapping("/deliveries/{deliveryId}/updateDeliveryStatusToTheWayToRestaurant")
+    ResponseEntity<DeliveryDto> updateDeliveryStatusToTheWayToRestaurant(@PathVariable Long deliveryId) {
+        DeliveryDto deliveryDto = deliveryService.updateDeliveryStatusToTheWayToRestaurant(deliveryId);
+
+        return new ResponseEntity<>(deliveryDto, HttpStatus.OK);
+    }
+
+    @Secured("ROLE_DELIVERY_PERSONNEL")
+    @PutMapping("/deliveries/{deliveryId}/updateDeliveryStatusToOrderPickedUp")
+    ResponseEntity<DeliveryDto> updateDeliveryStatusToOrderPickedUp(@PathVariable Long deliveryId) {
+        DeliveryDto deliveryDto = deliveryService.updateDeliveryStatusToOrderPickedUp(deliveryId);
+
+        return new ResponseEntity<>(deliveryDto, HttpStatus.OK);
+    }
+
+    @Secured("ROLE_DELIVERY_PERSONNEL")
+    @PutMapping("/deliveries/{deliveryId}/updateDeliveryStatusToOnTheWay")
+    ResponseEntity<DeliveryDto> updateDeliveryStatusToOnTheWay(@PathVariable Long deliveryId) {
+        DeliveryDto deliveryDto = deliveryService.updateDeliveryStatusToOnTheWay(deliveryId);
+
+        return new ResponseEntity<>(deliveryDto, HttpStatus.OK);
+    }
+
+    @Secured("ROLE_DELIVERY_PERSONNEL")
+    @PutMapping("/deliveries/{deliveryId}/updateDeliveryStatusToReachedCustomerLocation")
+    ResponseEntity<DeliveryDto> updateDeliveryStatusToReachedCustomerLocation(@PathVariable Long deliveryId) {
+        DeliveryDto deliveryDto = deliveryService.updateDeliveryStatusToReachedCustomerLocation(deliveryId);
+
+        return new ResponseEntity<>(deliveryDto, HttpStatus.OK);
+    }
+
+    @Secured("ROLE_DELIVERY_PERSONNEL")
+    @PutMapping("/deliveries/{deliveryId}/updateDeliveryStatusToOrderDelivered")
+    ResponseEntity<DeliveryDto> updateDeliveryStatusToOrderDelivered(@PathVariable Long deliveryId) {
+        DeliveryDto deliveryDto = deliveryService.updateDeliveryStatusToOrderDelivered(deliveryId);
 
         return new ResponseEntity<>(deliveryDto, HttpStatus.OK);
     }

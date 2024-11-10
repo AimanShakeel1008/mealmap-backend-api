@@ -23,6 +23,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +57,8 @@ public class DeliverRequestServiceImpl implements DeliveryRequestService {
                 .findById(deliveryRequestId).orElseThrow(() -> new ResourceNotFoundException("Delivery Request not found"));
 
         DeliveryPersonnel deliveryPersonnel = deliveryPersonnelRepository
-                .findById(currentDeliveryPersonnel.getId()).orElseThrow(() -> new ResourceNotFoundException("Delivery Personnel not found"));
+                .findById(currentDeliveryPersonnel.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Delivery Personnel not found"));
 
         Delivery delivery = new Delivery();
 
@@ -82,5 +84,13 @@ public class DeliverRequestServiceImpl implements DeliveryRequestService {
         deliveryPersonnelService.updateDeliveryPersonnelAvailability(deliveryPersonnel, false);
 
         return modelMapper.map(savedDelivery, DeliveryDto.class);
+    }
+
+    @Override
+    public DeliveryRequestDto getDeliveryRequestById(Long deliveryRequestId) {
+        DeliveryRequest deliveryRequest = deliveryRequestRepository.findById(deliveryRequestId)
+                .orElseThrow(() -> new ResourceNotFoundException("Delivery request not found"));
+
+        return modelMapper.map(deliveryRequest, DeliveryRequestDto.class);
     }
 }

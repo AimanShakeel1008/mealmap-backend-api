@@ -19,4 +19,8 @@ public interface OrderService {
     List<OrderDto> getAllOrdersOfARestaurant(Long restaurantId);
 
     OrderDto getOrderOfARestaurantByOrderId(Long restaurantId, Long orderId);
+
+    List<OrderDto> getAllOrdersOfACustomer();
+
+    OrderDto getOrdersOfACustomerByOrderId(Long orderId);
 }
