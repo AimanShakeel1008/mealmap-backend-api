@@ -42,11 +42,21 @@ public class AuthServiceImpl implements AuthService {
 
         mappedUser.setRoles(roles);
 
+        mappedUser.setActive(true);
+
         return userRepository.save(mappedUser);
     }
 
     @Override
     public String[] login(String email, String password) {
+
+        User loginRequestedUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: "+email));
+
+        if(!loginRequestedUser.getActive()) {
+            throw new RuntimeException("User account is deactivated.");
+        }
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );

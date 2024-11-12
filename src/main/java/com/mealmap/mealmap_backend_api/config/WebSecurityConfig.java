@@ -23,6 +23,7 @@ public class WebSecurityConfig {
             "/api/v1/customer/register",
             "/api/v1/deliveryPersonnel/register",
             "/api/v1/restaurantOwner/register",
+            "/api/v1/admin/register",
             "/api/v1/auth/*",
             "/swagger-ui/**","/v3/api-docs/**"};
 

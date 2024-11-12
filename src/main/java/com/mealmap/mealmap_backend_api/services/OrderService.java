@@ -23,4 +23,10 @@ public interface OrderService {
     List<OrderDto> getAllOrdersOfACustomer();
 
     OrderDto getOrdersOfACustomerByOrderId(Long orderId);
+
+    List<OrderDto> getAllOrders();
+
+    OrderDto getOrderByOrderId(Long orderId);
+
+    OrderDto cancelOrder(Long orderId);
 }

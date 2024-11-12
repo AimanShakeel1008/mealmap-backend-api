@@ -22,7 +22,6 @@ public class CustomerController {
     private final CustomerService customerService;
     private final CartService cartService;
     private final OrderService orderService;
-    private final MenuService menuService;
 
     @PostMapping("/register")
     ResponseEntity<UserDto> register(@RequestBody CustomerSignupDto customerSignupDto) {

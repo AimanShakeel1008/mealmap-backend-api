@@ -5,10 +5,7 @@ import com.mealmap.mealmap_backend_api.entities.*;
 import com.mealmap.mealmap_backend_api.entities.enums.*;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.respositories.*;
-import com.mealmap.mealmap_backend_api.services.CartService;
-import com.mealmap.mealmap_backend_api.services.CustomerService;
-import com.mealmap.mealmap_backend_api.services.OrderService;
-import com.mealmap.mealmap_backend_api.services.RestaurantOwnerService;
+import com.mealmap.mealmap_backend_api.services.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +30,8 @@ public class OrderServiceImpl implements OrderService {
     private final RestaurantOwnerService restaurantOwnerService;
     private final RestaurantRepository restaurantRepository;
     private final DeliveryRepository deliveryRepository;
+    private final DeliveryPersonnelRepository deliveryPersonnelRepository;
+    private final AdminService adminService;
 
     @Override
     public OrderDto placeOrder(PaymentMode paymentMode) {
@@ -211,6 +211,61 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: "+orderId));
 
         return modelMapper.map(order, OrderDto.class);
+    }
+
+    @Override
+    public List<OrderDto> getAllOrders() {
+
+        List<Order> allOrders = orderRepository.findAll();
+
+        return allOrders.stream().map(order -> modelMapper.map(order, OrderDto.class)).toList();
+    }
+
+    @Override
+    public OrderDto getOrderByOrderId(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order Not found with id: " + orderId));
+
+        return modelMapper.map(order, OrderDto.class);
+    }
+
+    @Override
+    @Transactional
+    public OrderDto cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order Not found with id: " + orderId));
+
+        order.setOrderStatus(OrderStatus.CANCELLED);
+        Order savedOrder = orderRepository.save(order);
+
+        Optional<DeliveryRequest> optionalDeliveryRequest = deliveryRequestRepository.findByOrder(order);
+
+        if(optionalDeliveryRequest.isPresent()) {
+            DeliveryRequest deliveryRequest = optionalDeliveryRequest.get();
+
+            deliveryRequest.setDeliveryRequestStatus(DeliveryRequestStatus.CANCELLED);
+
+            deliveryRequestRepository.save(deliveryRequest);
+        }
+
+        Optional<Delivery> optionalDelivery = deliveryRepository.findByOrder(order);
+
+        if(optionalDelivery.isPresent()) {
+            Delivery delivery = optionalDelivery.get();
+
+            delivery.setDeliveryStatus(DeliveryStatus.CANCELLED);
+
+            deliveryRepository.save(delivery);
+
+            DeliveryPersonnel deliveryPersonnel = delivery.getDeliveryPersonnel();
+
+            deliveryPersonnel.setAvailable(true);
+
+            deliveryPersonnelRepository.save(deliveryPersonnel);
+        }
+
+        return modelMapper.map(savedOrder, OrderDto.class);
+
     }
 
     @Override

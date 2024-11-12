@@ -14,4 +14,5 @@ public class DeliveryPersonnelDto {
     private Long id;
     private UserDto user;
     private Boolean available;
+    private String contactNumber;
 }
