@@ -76,7 +76,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         DeliveryPersonnel currentDeliveryPersonnel = deliveryPersonnelService.getCurrentDeliveryPersonnel();
         Delivery delivery = deliveryRepository.findByDeliveryPersonnelAndId(currentDeliveryPersonnel, deliveryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Delivery not found"));
-        return null;
+        return modelMapper.map(delivery, DeliveryDto.class);
     }
 
     @Override

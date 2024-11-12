@@ -242,8 +242,8 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find delivery associated with order id: " + orderId));
 
         if(!deliveryRequest.getDeliveryRequestStatus().equals(DeliveryRequestStatus.CONFIRMED) ||
-                !delivery.getDeliveryStatus().equals(DeliveryStatus.DELIVERY_PERSON_ASSIGNED)) {
-            throw new RuntimeException("Order status cannot be updated as delivery personnel not yet assigned for this order.");
+                !delivery.getDeliveryStatus().equals(DeliveryStatus.ORDER_PICKED_UP)) {
+            throw new RuntimeException("Order status cannot be updated as delivery personnel not yet picked up the order.");
         }
 
 

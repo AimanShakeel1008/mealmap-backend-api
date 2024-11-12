@@ -72,9 +72,17 @@ public class DeliveryPersonnelController {
     }
 
     @Secured("ROLE_DELIVERY_PERSONNEL")
-    @PutMapping("/deliveries/{deliveryId}/updateDeliveryStatusToTheWayToRestaurant")
+    @PutMapping("/deliveries/{deliveryId}/updateDeliveryStatusToOnTheWayToRestaurant")
     ResponseEntity<DeliveryDto> updateDeliveryStatusToTheWayToRestaurant(@PathVariable Long deliveryId) {
         DeliveryDto deliveryDto = deliveryService.updateDeliveryStatusToTheWayToRestaurant(deliveryId);
+
+        return new ResponseEntity<>(deliveryDto, HttpStatus.OK);
+    }
+
+    @Secured("ROLE_DELIVERY_PERSONNEL")
+    @PutMapping("/deliveries/{deliveryId}/updateDeliveryStatusToAtTheRestaurant")
+    ResponseEntity<DeliveryDto> updateDeliveryStatusToAtTheRestaurant(@PathVariable Long deliveryId) {
+        DeliveryDto deliveryDto = deliveryService.updateDeliveryStatusToAtTheRestaurant(deliveryId);
 
         return new ResponseEntity<>(deliveryDto, HttpStatus.OK);
     }
