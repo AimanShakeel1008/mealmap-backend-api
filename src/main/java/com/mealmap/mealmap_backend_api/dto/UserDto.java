@@ -2,9 +2,9 @@ package com.mealmap.mealmap_backend_api.dto;
 
 import com.mealmap.mealmap_backend_api.entities.enums.Role;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -12,6 +12,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserDto {
 
     private Long id;

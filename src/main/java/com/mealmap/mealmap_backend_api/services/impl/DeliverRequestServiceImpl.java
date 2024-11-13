@@ -8,7 +8,6 @@ import com.mealmap.mealmap_backend_api.entities.DeliveryRequest;
 import com.mealmap.mealmap_backend_api.entities.Order;
 import com.mealmap.mealmap_backend_api.entities.enums.DeliveryRequestStatus;
 import com.mealmap.mealmap_backend_api.entities.enums.DeliveryStatus;
-import com.mealmap.mealmap_backend_api.entities.enums.OrderStatus;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.exceptions.RuntimeConflictException;
 import com.mealmap.mealmap_backend_api.respositories.DeliveryPersonnelRepository;
@@ -23,7 +22,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

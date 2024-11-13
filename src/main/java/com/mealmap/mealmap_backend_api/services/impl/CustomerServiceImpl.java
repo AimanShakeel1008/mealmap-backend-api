@@ -1,7 +1,10 @@
 package com.mealmap.mealmap_backend_api.services.impl;
 
 import com.mealmap.mealmap_backend_api.dto.*;
-import com.mealmap.mealmap_backend_api.entities.*;
+import com.mealmap.mealmap_backend_api.entities.Cart;
+import com.mealmap.mealmap_backend_api.entities.Customer;
+import com.mealmap.mealmap_backend_api.entities.Restaurant;
+import com.mealmap.mealmap_backend_api.entities.User;
 import com.mealmap.mealmap_backend_api.entities.enums.Role;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.respositories.CartRepository;

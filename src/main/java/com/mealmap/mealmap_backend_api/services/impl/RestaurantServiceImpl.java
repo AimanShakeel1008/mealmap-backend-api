@@ -1,9 +1,6 @@
 package com.mealmap.mealmap_backend_api.services.impl;
 
-import com.mealmap.mealmap_backend_api.dto.MenuItemDto;
 import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
-import com.mealmap.mealmap_backend_api.entities.Menu;
-import com.mealmap.mealmap_backend_api.entities.MenuItem;
 import com.mealmap.mealmap_backend_api.entities.Restaurant;
 import com.mealmap.mealmap_backend_api.entities.RestaurantOwner;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
