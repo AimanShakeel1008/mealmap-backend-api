@@ -1,14 +1,12 @@
 package com.mealmap.mealmap_backend_api.services.impl;
 
 import com.mealmap.mealmap_backend_api.dto.*;
-import com.mealmap.mealmap_backend_api.entities.Cart;
-import com.mealmap.mealmap_backend_api.entities.Customer;
-import com.mealmap.mealmap_backend_api.entities.Menu;
-import com.mealmap.mealmap_backend_api.entities.User;
+import com.mealmap.mealmap_backend_api.entities.*;
 import com.mealmap.mealmap_backend_api.entities.enums.Role;
 import com.mealmap.mealmap_backend_api.exceptions.ResourceNotFoundException;
 import com.mealmap.mealmap_backend_api.respositories.CartRepository;
 import com.mealmap.mealmap_backend_api.respositories.CustomerRepository;
+import com.mealmap.mealmap_backend_api.respositories.RestaurantRepository;
 import com.mealmap.mealmap_backend_api.services.*;
 import com.mealmap.mealmap_backend_api.utils.SignupMapper;
 import jakarta.transaction.Transactional;
@@ -32,6 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final MenuService menuService;
     private final MenuItemService menuItemService;
     private final CartRepository cartRepository;
+    private final RestaurantRepository restaurantRepository;
 
     @Override
     @Transactional
@@ -125,7 +124,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<MenuDto> getMenuForARestaurant(Long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + restaurantId));
+
+        if(!restaurant.getActive()) throw new ResourceNotFoundException("No active restaurant found with id:"+restaurantId);
+
         List<MenuDto> menuForARestaurant = menuService.getMenuForARestaurant(restaurantId);
+
 
         menuForARestaurant.forEach(menu ->
                 menu.setItems(
@@ -142,6 +147,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public MenuDto getMenuForARestaurantById(Long restaurantId, Long menuId) {
 
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + restaurantId));
+
+        if(!restaurant.getActive()) throw new ResourceNotFoundException("No active restaurant found with id:"+restaurantId);
+
         MenuDto menu = menuService.getMenuForARestaurantById(restaurantId, menuId);
 
         menu.setItems(
@@ -156,6 +166,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public MenuItemDto getMenuItemForARestaurantById(Long restaurantId, Long menuId, Long menuItemId) {
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with id: " + restaurantId));
+
+        if(!restaurant.getActive()) throw new ResourceNotFoundException("No active restaurant found with id:"+restaurantId);
 
         MenuItemDto menuItem = menuService.getMenuItemInAMenu(restaurantId, menuId, menuItemId);
 

@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setCustomer(cart.getCustomer());
         order.setItems(new ArrayList<>(cart.getItems()));
-        order.setRestaurant(cart.getItems().getFirst().getMenuItem().getMenu().getRestaurant());
+        order.setRestaurant(cart.getItems().get(0).getMenuItem().getMenu().getRestaurant());
         order.setItemTotal(itemTotal);
         order.setTaxes(taxes);
         order.setDeliveryCharges(deliveryCharges);
