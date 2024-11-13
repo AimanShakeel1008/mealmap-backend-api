@@ -1,8 +1,5 @@
 package com.mealmap.mealmap_backend_api.services.impl;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
 import com.mealmap.mealmap_backend_api.entities.Restaurant;
 import com.mealmap.mealmap_backend_api.entities.RestaurantOwner;
@@ -20,6 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RestaurantServiceImplTest {
