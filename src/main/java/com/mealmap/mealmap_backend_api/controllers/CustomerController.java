@@ -5,10 +5,12 @@ import com.mealmap.mealmap_backend_api.entities.enums.PaymentMode;
 import com.mealmap.mealmap_backend_api.services.CartService;
 import com.mealmap.mealmap_backend_api.services.CustomerService;
 import com.mealmap.mealmap_backend_api.services.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class CustomerController {
     private final OrderService orderService;
 
     @PostMapping("/register")
-    ResponseEntity<UserDto> register(@RequestBody CustomerSignupDto customerSignupDto) {
+    ResponseEntity<UserDto> register(@Valid @RequestBody CustomerSignupDto customerSignupDto) {
         return new ResponseEntity<>(customerService.register(customerSignupDto), HttpStatus.CREATED);
     }
 
