@@ -20,6 +20,7 @@ public class WebSecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
 
     private static final String[] PUBLIC_ROUTES = {
+            "/",
             "/api/v1/customer/register",
             "/api/v1/deliveryPersonnel/register",
             "/api/v1/restaurantOwner/register",

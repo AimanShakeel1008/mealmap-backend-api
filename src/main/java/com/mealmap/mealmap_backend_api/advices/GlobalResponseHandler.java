@@ -20,7 +20,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
 
-        List<String> allowedRoutes = List.of("/v3/api-docs");
+        List<String> allowedRoutes = List.of("/","/v3/api-docs");
 
         boolean isAllowed = allowedRoutes.stream().anyMatch(route -> request.getURI().getPath().contains(route));
 
