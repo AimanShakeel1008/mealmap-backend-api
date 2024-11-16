@@ -1,6 +1,5 @@
 package com.mealmap.mealmap_backend_api.controllers;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
