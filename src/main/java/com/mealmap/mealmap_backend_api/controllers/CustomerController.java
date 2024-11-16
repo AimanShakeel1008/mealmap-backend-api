@@ -48,6 +48,18 @@ public class CustomerController {
     }
 
     @Secured("ROLE_CUSTOMER")
+    @GetMapping("/restaurants/by-dish")
+    ResponseEntity<List<RestaurantDto>> getRestaurantsByDishName(@RequestParam String disName) {
+        return new ResponseEntity<>(customerService.getRestaurantsByDishName(disName), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_CUSTOMER")
+    @GetMapping("/restaurants/by-cuisine")
+    ResponseEntity<List<RestaurantDto>> getRestaurantsByCuisine(@RequestParam String cuisineType) {
+        return new ResponseEntity<>(customerService.getRestaurantsByCuisine(cuisineType), HttpStatus.OK);
+    }
+
+    @Secured("ROLE_CUSTOMER")
     @GetMapping("/restaurants/{restaurantId}/menu")
     ResponseEntity<List<MenuDto>> getMenuForARestaurant(@PathVariable Long restaurantId) {
         return new ResponseEntity<>(customerService.getMenuForARestaurant(restaurantId), HttpStatus.OK);
