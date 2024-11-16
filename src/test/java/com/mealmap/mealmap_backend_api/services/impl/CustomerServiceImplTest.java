@@ -185,11 +185,11 @@ class CustomerServiceImplTest {
         when(restaurantService.getRestaurantByName("Restaurant")).thenReturn(restaurantDto);
 
         // Call method
-        RestaurantDto result = customerService.getRestaurantByName("Restaurant");
+        List<RestaurantDto> result = customerService.searchRestaurantByName("Restaurant");
 
         // Verifications
         assertNotNull(result);
-        assertEquals("Restaurant", result.getName());
+        assertEquals("Restaurant", result.get(0).getName());
     }
 
     // Test Case 8: Test for getRestaurantByName() when the restaurant is inactive
@@ -200,7 +200,7 @@ class CustomerServiceImplTest {
         when(restaurantService.getRestaurantByName("Restaurant")).thenReturn(restaurantDto);
 
         // Call method and verify exception
-        assertThrows(ResourceNotFoundException.class, () -> customerService.getRestaurantByName("Restaurant"));
+        assertThrows(ResourceNotFoundException.class, () -> customerService.searchRestaurantByName("Restaurant"));
     }
 
     // Test Case 9: Test for getRestaurantsByDishName()

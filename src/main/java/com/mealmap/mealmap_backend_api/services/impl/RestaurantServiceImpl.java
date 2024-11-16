@@ -54,9 +54,16 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public RestaurantDto getRestaurantByName(String restaurantName) {
         Restaurant restaurant = restaurantRepository.findByName(restaurantName)
-                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found with name: " + restaurantName));
+                .orElseThrow(()->new ResourceNotFoundException("Restaurant not found with name: "+restaurantName));
 
         return modelMapper.map(restaurant, RestaurantDto.class);
+
+    }
+
+    @Override
+    public List<RestaurantDto> searchRestaurantByName(String restaurantName) {
+        List<Restaurant> restaurants = restaurantRepository.searchByName(restaurantName);
+        return restaurants.stream().map(restaurant -> modelMapper.map(restaurant, RestaurantDto.class)).toList();
     }
 
     @Override

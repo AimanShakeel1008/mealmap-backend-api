@@ -13,8 +13,10 @@ import java.util.Optional;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-    @Query("SELECT r FROM Restaurant r WHERE LOWER(r.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     Optional<Restaurant> findByName(@Param("name") String name);
+
+    @Query("SELECT r FROM Restaurant r WHERE LOWER(r.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    List<Restaurant> searchByName(@Param("name") String name);
 
     @Query("SELECT r FROM Restaurant r WHERE LOWER(r.cuisineType) LIKE LOWER(CONCAT('%', :cuisineType, '%'))")
     Optional<Restaurant> findRestaurantByCuisineType(@Param("cuisineType") String cuisineType);

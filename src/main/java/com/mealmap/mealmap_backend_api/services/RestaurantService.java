@@ -5,6 +5,7 @@ import com.mealmap.mealmap_backend_api.dto.RestaurantDto;
 import com.mealmap.mealmap_backend_api.entities.RestaurantOwner;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RestaurantService {
     RestaurantDto createNewRestaurant(RestaurantDto restaurantDto);
@@ -12,6 +13,8 @@ public interface RestaurantService {
     RestaurantDto getRestaurantById(Long restaurantId);
 
     RestaurantDto getRestaurantByName(String restaurantName);
+
+    List<RestaurantDto> searchRestaurantByName(String restaurantName);
 
     List<RestaurantDto> getAllRestaurants();
 

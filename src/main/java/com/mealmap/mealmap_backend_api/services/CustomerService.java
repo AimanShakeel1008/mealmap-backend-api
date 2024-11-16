@@ -16,7 +16,7 @@ public interface CustomerService {
 
     RestaurantDto getRestaurantById(Long restaurantId);
 
-    RestaurantDto getRestaurantByName(String restaurantName);
+    List<RestaurantDto> searchRestaurantByName(String restaurantName);
 
     List<RestaurantDto> getRestaurantsByDishName(String dishName);
 

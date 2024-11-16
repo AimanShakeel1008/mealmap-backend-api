@@ -98,15 +98,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public RestaurantDto getRestaurantByName(String restaurantName) {
+    public List<RestaurantDto> searchRestaurantByName(String restaurantName) {
 
-        RestaurantDto restaurantDto = restaurantService.getRestaurantByName(restaurantName);
-
-        if(!restaurantDto.getActive()) {
-            throw new ResourceNotFoundException("No active restaurant found with name: "+restaurantName);
-        }
-
-        return  restaurantDto;
+        return restaurantService.searchRestaurantByName(restaurantName)
+                .stream()
+                .filter(RestaurantDto::getActive)
+                .toList();
     }
 
     @Override
